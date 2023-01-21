@@ -1,0 +1,20 @@
+.disabled-plot{
+    ::ng-deep {
+        g.xy rect{
+            pointer-events: none !important;
+        }
+        div.modebar-container {
+            pointer-events: none !important;
+            display: none;
+        }
+    }
+}
+
+.loading-blur {
+    -webkit-filter: blur(5px);
+    -moz-filter: blur(5px);
+    -o-filter: blur(5px);
+    -ms-filter: blur(5px);
+    filter: blur(5px);
+    background-color: #ccc;
+}
