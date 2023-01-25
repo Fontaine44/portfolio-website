@@ -139,6 +139,7 @@ export class ShotMapComponent implements AfterViewInit {
         name: player.person.fullName,
       });
     });
+    this.players.sort((a: any, b: any) => a.name.localeCompare(b.name));  // Alphabetical order
   }
 
   async parseGames(games: any) {
@@ -165,7 +166,7 @@ export class ShotMapComponent implements AfterViewInit {
   onFormSubmit() {
     this.disablePlot();
     let params: any = {};
-    this.filtersForm.get('event')?.setValue(this.filtersForm.get('event')?.value? 'GOAL' : '');
+    this.filtersForm.get('event')?.setValue(this.filtersForm.get('event')?.value ? 'GOAL' : '');
 
     for (const field in this.filtersForm.controls) {    // Get clean fields
       let val = this.filtersForm.get(field)?.value;
