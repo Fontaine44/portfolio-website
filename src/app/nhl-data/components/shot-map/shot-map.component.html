@@ -10,16 +10,16 @@
       <form class="px-3 pb-3 filters-form" [formGroup]="filtersForm" (ngSubmit)="onFormSubmit()">
 
         <div class="my-2">
-          <label for="teamId" class="form-label">Team:</label>
-          <select class="form-select form-control" id="teamId" formControlName="teamId" (change)="loadPlayers($event); loadGames($event);">
+          <label for="teamCode" class="form-label">Team:</label>
+          <select class="form-select form-control" id="teamCode" formControlName="teamCode" (change)="onTeamChange($event)">
             <option value="" selected hidden></option>
-            <option *ngFor="let team of teams" value="{{team.id}}">{{team.name}}</option>
+            <option *ngFor="let team of teams" value="{{team.abbrev}}">{{team.name}}</option>
           </select>
         </div>
 
         <div class="mb-2">
-          <label for="playerId" class="form-label">Player:</label>
-          <select class="form-select form-control" id="playerId" formControlName="playerId">
+          <label for="shooterPlayerId" class="form-label">Player:</label>
+          <select class="form-select form-control" id="shooterPlayerId" formControlName="shooterPlayerId">
             <option value="" selected hidden></option>
             <option *ngFor="let player of players" value="{{player.id}}">{{player.name}}</option>
           </select>
@@ -33,7 +33,7 @@
           </select>
         </div>
 
-        <div class="mb-2">
+        <!-- <div class="mb-2">
           <label for="strength" class="form-label">Strength:</label><br>
           <div class="form-check form-check-inline">
             <label class="form-check-label" for="All">All</label>
@@ -54,7 +54,7 @@
             <label class="form-check-label" for="eventTypeId">Goals only</label>
             <input class="form-check-input" type="checkbox" role="switch" value="GOAL" id="eventTypeId" formControlName="eventTypeId">
           </div>
-        </div>
+        </div> -->
 
         <!-- <div class="mb-2">
           <div class="form-check form-switch">

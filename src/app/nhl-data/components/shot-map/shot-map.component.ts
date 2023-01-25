@@ -19,11 +19,11 @@ export class ShotMapComponent implements AfterViewInit {
   GRAPH_HEIGHT_TEXT!: string;
 
   filtersForm: FormGroup = this.fb.group({
-    teamId: '',
-    playerId: {value:'', disabled: true},
+    teamCode: 'MTL',
+    shooterPlayerId: {value:'', disabled: true},
     gameId: {value:'', disabled: true},
     strength: '',
-    eventTypeId: '',
+    event: '',
     defensiveSide: false,
   });
   

@@ -23,10 +23,9 @@ export class ShotPlotComponent implements OnInit, OnChanges {
     name: 'scatter',
     opacity: 0.60,
     hovertemplate:
-      '%{text.playerName} <br>'+
-      '<b>%{text.eventTypeId}</b><br>' +
-      '%{text.secondaryType}<br>' +
-      '(%{text.x},%{text.y})<i> - %{text.distance} ft.</i>',
+    '%{text.shooterName} <br>'+
+    '<i>%{text.shotType}</i><br>' +
+    '(%{text.xCordAdjusted},%{text.yCordAdjusted})',
     hoverlabel: {
       namelength: 0
     },
@@ -114,12 +113,14 @@ export class ShotPlotComponent implements OnInit, OnChanges {
       this.x = [];
       this.y = [];
       this.data.shots.forEach((val: any) => {
-        this.x.push(val["x"]);
-        this.y.push(val["y"] + 42.5);
+        this.x.push(val["xCordAdjusted"]);
+        this.y.push(val["yCordAdjusted"] + 42.5);
       });
-      this.pointsTrace.marker.color = this.data.shots.map((d: any) => {
-        return d["crossRed"] ? "black" : "blue"
-      });
+      if (this.x.length > 0) {
+        this.pointsTrace.marker.color = this.data.shots.map((d: any) => {
+          return d["event"] == "GOAL" ? "red" : "black"
+        });
+      }
       this.pointsTrace.x = this.x;
       this.pointsTrace.y = this.y;
       this.pointsTrace.text = this.data.shots;
