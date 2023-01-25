@@ -1,5 +1,6 @@
 import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
+import { forkJoin, Observable } from 'rxjs';
 import { HttpService } from 'src/app/shared/services/http.service';
 
 
@@ -36,7 +37,7 @@ export class ShotMapComponent implements AfterViewInit {
   games: Array<any> = []
 
   constructor( private cdRef:ChangeDetectorRef, private httpService: HttpService,  private fb: FormBuilder) {
-    this.fetchData({})
+    this.fetchData({"teamCode": "MTL"})
     this.loadTeams();
   }
 
@@ -61,7 +62,7 @@ export class ShotMapComponent implements AfterViewInit {
   }
 
   fetchData(params: object) {
-    this.httpService.httpGetWithParameters("https://fontaine.onrender.com/shots", params).subscribe({
+    this.httpService.httpGetWithParameters("http://localhost:5000/shots?zone=OFF", params).subscribe({
       next: (v) => {
         this.data = v;
       },
@@ -78,82 +79,106 @@ export class ShotMapComponent implements AfterViewInit {
     this.dataReady = false;
   }
 
+  onTeamChange(event: any) {
+    const team = this.teams.find(x => x.abbrev == event.target.value);
+    this.loadPlayersAndGames(team);
+  }
+
+  loadPlayersAndGames(team: any) {
+    forkJoin({
+      players: this.getPlayers(team),
+      games: this.getGames(team)
+    }).subscribe({
+      next: async (data: any) => {
+        await this.parsePlayers(data.players);
+        await this.parseGames(data.games);
+      },
+      error: (e) => console.error(e),
+      complete: () => {
+        this.filtersForm.get('gameId')?.enable();
+        this.filtersForm.get('shooterPlayerId')?.enable();
+      }
+    });
+  }
+
   loadTeams() {
     this.httpService.httpGet("https://statsapi.web.nhl.com/api/v1/teams").subscribe({
       next: (data) => {
         data.teams.forEach((team: any) => {
           this.teams.push({
             id: team.id,
+            abbrev: team.abbreviation,
             name: team.name,
             link: team.link,
           });
         })
       },
       error: (e) => console.error(e),
-      complete: () => console.log() 
+      complete: () => this.loadPlayersAndGames(this.teams.find(x => x.abbrev == "MTL")) 
     });
   }
 
-  loadPlayers(event: any) {
+  getPlayers(team: any): Observable<any> {
+    this.filtersForm.get('shooterPlayerId')?.disable();
+    this.filtersForm.get('shooterPlayerId')?.setValue('');
     this.players = [];
-    this.filtersForm.get('playerId')?.disable();
-    this.filtersForm.get('playerId')?.setValue('');
-    const teamId = parseInt(event.target.value);
-    const team = this.teams.find(x => x.id == teamId);
-    this.httpService.httpGet("https://statsapi.web.nhl.com"+team.link+"/roster").subscribe({
-      next: (data) => {
-        data.roster.forEach((player: any) => {
-          this.players.push({
-            id: player.person.id,
-            name: player.person.fullName,
-          });
-        })
-      },
-      error: (e) => console.error(e),
-      complete: () => this.filtersForm.get('playerId')?.enable()
-    });
+    return this.httpService.httpGet("https://statsapi.web.nhl.com"+team.link+"/roster");
   }
 
-  loadGames(event: any) {
+  getGames(team: any): Observable<any> {
     this.filtersForm.get('gameId')?.disable();
     this.filtersForm.get('gameId')?.setValue('');
     this.games = [];
-    const teamId = parseInt(event.target.value);
-    this.httpService.httpGet("https://statsapi.web.nhl.com/api/v1/schedule?season=20222023&gameType=R&teamId="+teamId).subscribe({
-      next: (data) => {
-        data.dates.forEach((game: any) => {
-          if (game.games[0].status.statusCode == 7) {
-            this.games.push({
-              id: game.games[0].gamePk,
-              date: game.date,
-              teamHome: game.games[0].teams.home.team.name,
-              teamAway: game.games[0].teams.away.team.name,
-            });
-          }
-        })
-      },
-      error: (e) => console.error(e),
-      complete: () => this.filtersForm.get('gameId')?.enable()
+    return this.httpService.httpGet("https://statsapi.web.nhl.com/api/v1/schedule?season=20222023&gameType=R&teamId="+team.id.toString());
+  }
+
+  async parsePlayers(players: any) {
+    players.roster.forEach((player: any) => {
+      this.players.push({
+        id: player.person.id,
+        name: player.person.fullName,
+      });
+    });
+  }
+
+  async parseGames(games: any) {
+    games.dates.forEach((game: any) => {
+      if (game.games[0].status.statusCode == 7) {
+        this.games.push({
+          id: game.games[0].gamePk,
+          date: game.date,
+          teamHome: game.games[0].teams.home.team.name,
+          teamAway: game.games[0].teams.away.team.name,
+        });
+      }
     });
   }
 
   resetForm() {
-    this.filtersForm.reset();
-    this.players = [];
-    this.filtersForm.get('playerId')?.disable();
-    this.filtersForm.get('gameId')?.disable();
+    const previousTeam = this.filtersForm.get('teamCode')?.value;
+    this.filtersForm.reset({teamCode: 'MTL'});
+    if (previousTeam != 'MTL') {
+      this.loadPlayersAndGames(this.teams.find(x => x.abbrev == "MTL"));
+    };
   }
 
   onFormSubmit() {
     this.disablePlot();
     let params: any = {};
-    this.filtersForm.get('eventTypeId')?.setValue(this.filtersForm.get('eventTypeId')?.value? 'GOAL' : '');
+    this.filtersForm.get('event')?.setValue(this.filtersForm.get('event')?.value? 'GOAL' : '');
+
     for (const field in this.filtersForm.controls) {    // Get clean fields
       let val = this.filtersForm.get(field)?.value;
       if (val) {
         params[field] = val;
       };
     }
+
+    const longGameId = params.gameId;
+    if (longGameId) {
+      params.gameId = parseInt(longGameId.substring(4));
+    }
+
     this.fetchData(params);
   }
 }
