@@ -14,6 +14,7 @@ export class ShotMapComponent implements AfterViewInit {
   @ViewChild('column') column? : ElementRef;
   @ViewChild('row') row? : ElementRef;
 
+  NHL_API = 'https://statsapi.web.nhl.com/api/v1/';
   GRAPH_WIDTH: any = null;
   GRAPH_HEIGHT: any = null;
   GRAPH_WIDTH_TEXT!: string;
@@ -64,7 +65,7 @@ export class ShotMapComponent implements AfterViewInit {
   }
 
   fetchData(params: object) {
-    this.httpService.httpGetWithParameters("http://localhost:5000/shots?zone=OFF", params).subscribe({
+    this.httpService.httpGetWithParameters("https://fontaine.onrender.com/shots?zone=OFF", params).subscribe({
       next: (v) => {
         this.data = v;
         this.numberShots = v.length;
@@ -105,7 +106,7 @@ export class ShotMapComponent implements AfterViewInit {
   }
 
   loadTeams() {
-    this.httpService.httpGet("https://statsapi.web.nhl.com/api/v1/teams").subscribe({
+    this.httpService.httpGet(this.NHL_API + "teams").subscribe({
       next: (data) => {
         data.teams.forEach((team: any) => {
           this.teams.push({
@@ -133,7 +134,7 @@ export class ShotMapComponent implements AfterViewInit {
     this.filtersForm.get('gameId')?.disable();
     this.filtersForm.get('gameId')?.setValue('');
     this.games = [];
-    return this.httpService.httpGet("https://statsapi.web.nhl.com/api/v1/schedule?season=20222023&gameType=R&teamId="+team.id.toString());
+    return this.httpService.httpGet(this.NHL_API + "schedule?season=20222023&gameType=R&teamId="+team.id.toString());
   }
 
   async parsePlayers(players: any) {
