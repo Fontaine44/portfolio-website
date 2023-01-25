@@ -55,18 +55,27 @@
           </div>
 
           <div class="mb-2">
+            <label for="shooterLeftRight" class="form-label">Handedness:</label><br>
+            <div class="form-check form-check-inline">
+              <label class="form-check-label" for="L/R">L/R</label>
+              <input default class="form-check-input" type="radio" id="L/R" value="" formControlName="shooterLeftRight">
+            </div>
+            <div class="form-check form-check-inline">
+              <label class="form-check-label" for="L">L</label>
+              <input class="form-check-input" type="radio" id="L" value="L" formControlName="shooterLeftRight">
+            </div>
+            <div class="form-check form-check-inline">
+              <label class="form-check-label" for="R">R</label>
+              <input class="form-check-input" type="radio" id="R" value="R" formControlName="shooterLeftRight">
+            </div>
+          </div>
+
+          <div class="mb-2">
             <div class="form-check form-switch">
               <label class="form-check-label" for="event">Goals only</label>
               <input class="form-check-input" type="checkbox" role="switch" value="GOAL" id="event" formControlName="event">
             </div>
           </div>
-
-          <!-- <div class="mb-2">
-            <div class="form-check form-switch">
-              <label class="form-check-label" for="defensiveSide">Show defensive zone shots (blue)</label>
-              <input class="form-check-input" type="checkbox" role="switch" id="defensiveSide" formControlName="defensiveSide">
-            </div>
-          </div> -->
 
           <div class="d-flex mt-3">
             <button type="submit" class="btn btn-primary me-3 w-25">Filter</button>
@@ -76,7 +85,7 @@
       </div>
 
       <div class="row">
-        Number of shots: {{numberShots}}
+        <span>Number of shots: <b>{{numberShots}}</b></span>
       </div>
 
     </div>

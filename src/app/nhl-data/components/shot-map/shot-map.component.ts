@@ -25,7 +25,7 @@ export class ShotMapComponent implements AfterViewInit {
     gameId: {value:'', disabled: true},
     strength: '',
     event: '',
-    defensiveSide: false,
+    shooterLeftRight: ''
   });
   
   dataReady = false;
