@@ -3,75 +3,82 @@
   <div #row class="row w-100 m-0">
 
     <div class="col-lg-4 d-flex flex-column mb-3 px-0">
-      <div class="d-flex align-middle filters-border m-0 py-2 px-3">
-        <h5 class="m-0">Filters</h5>
+      <div class="row mb-2">
+        <div class="d-flex align-middle filters-border m-0 py-2 px-3">
+          <h5 class="m-0">Filters</h5>
+        </div>
+
+        <form class="px-3 pb-3 filters-form" [formGroup]="filtersForm" (ngSubmit)="onFormSubmit()">
+
+          <div class="my-2">
+            <label for="teamCode" class="form-label">Team:</label>
+            <select class="form-select form-control" id="teamCode" formControlName="teamCode" (change)="onTeamChange($event)">
+              <option value="" selected hidden></option>
+              <option *ngFor="let team of teams" value="{{team.abbrev}}">{{team.name}}</option>
+            </select>
+          </div>
+
+          <div class="mb-2">
+            <label for="shooterPlayerId" class="form-label">Player:</label>
+            <select class="form-select form-control" id="shooterPlayerId" formControlName="shooterPlayerId">
+              <option value="" selected hidden></option>
+              <option *ngFor="let player of players" value="{{player.id}}">{{player.name}}</option>
+            </select>
+          </div>
+
+          <div class="mb-2">
+            <label for="game" class="form-label">Game:</label>
+            <select class="form-select form-control" id="gameId" formControlName="gameId">
+              <option value="" selected hidden></option>
+              <option *ngFor="let game of games" value="{{game.id}}">{{game.teamAway}} vs {{game.teamHome}} ({{game.date}})</option>
+            </select>
+          </div>
+
+          <div class="mb-2">
+            <label for="strength" class="form-label">Strength:</label><br>
+            <div class="form-check form-check-inline">
+              <label class="form-check-label" for="All">All</label>
+              <input default class="form-check-input" type="radio" id="All" value="" formControlName="strength">
+            </div>
+            <div class="form-check form-check-inline">
+              <label class="form-check-label" for="PP">PP</label>
+              <input class="form-check-input" type="radio" id="PP" value="PP" formControlName="strength">
+            </div>
+            <div class="form-check form-check-inline">
+              <label class="form-check-label" for="PK">PK</label>
+              <input class="form-check-input" type="radio" id="PK" value="PK" formControlName="strength">
+            </div>
+            <div class="form-check form-check-inline">
+              <label class="form-check-label" for="EVEN">EVEN</label>
+              <input class="form-check-input" type="radio" id="EVEN" value="EVEN"  formControlName="strength">
+            </div>
+          </div>
+
+          <div class="mb-2">
+            <div class="form-check form-switch">
+              <label class="form-check-label" for="event">Goals only</label>
+              <input class="form-check-input" type="checkbox" role="switch" value="GOAL" id="event" formControlName="event">
+            </div>
+          </div>
+
+          <!-- <div class="mb-2">
+            <div class="form-check form-switch">
+              <label class="form-check-label" for="defensiveSide">Show defensive zone shots (blue)</label>
+              <input class="form-check-input" type="checkbox" role="switch" id="defensiveSide" formControlName="defensiveSide">
+            </div>
+          </div> -->
+
+          <div class="d-flex mt-3">
+            <button type="submit" class="btn btn-primary me-3 w-25">Filter</button>
+            <button type="button" class="text-black btn btn-outline-primary w-25" (click)="resetForm()">Reset</button>
+          </div>
+        </form>
       </div>
 
-      <form class="px-3 pb-3 filters-form" [formGroup]="filtersForm" (ngSubmit)="onFormSubmit()">
+      <div class="row">
+        Number of shots: {{numberShots}}
+      </div>
 
-        <div class="my-2">
-          <label for="teamCode" class="form-label">Team:</label>
-          <select class="form-select form-control" id="teamCode" formControlName="teamCode" (change)="onTeamChange($event)">
-            <option value="" selected hidden></option>
-            <option *ngFor="let team of teams" value="{{team.abbrev}}">{{team.name}}</option>
-          </select>
-        </div>
-
-        <div class="mb-2">
-          <label for="shooterPlayerId" class="form-label">Player:</label>
-          <select class="form-select form-control" id="shooterPlayerId" formControlName="shooterPlayerId">
-            <option value="" selected hidden></option>
-            <option *ngFor="let player of players" value="{{player.id}}">{{player.name}}</option>
-          </select>
-        </div>
-
-        <div class="mb-2">
-          <label for="game" class="form-label">Game:</label>
-          <select class="form-select form-control" id="gameId" formControlName="gameId">
-            <option value="" selected hidden></option>
-            <option *ngFor="let game of games" value="{{game.id}}">{{game.teamAway}} vs {{game.teamHome}} ({{game.date}})</option>
-          </select>
-        </div>
-
-        <div class="mb-2">
-          <label for="strength" class="form-label">Strength:</label><br>
-          <div class="form-check form-check-inline">
-            <label class="form-check-label" for="All">All</label>
-            <input default class="form-check-input" type="radio" id="All" value="" formControlName="strength">
-          </div>
-          <div class="form-check form-check-inline">
-            <label class="form-check-label" for="PP">PP</label>
-            <input class="form-check-input" type="radio" id="PP" value="PP" formControlName="strength">
-          </div>
-          <div class="form-check form-check-inline">
-            <label class="form-check-label" for="PK">PK</label>
-            <input class="form-check-input" type="radio" id="PK" value="PK" formControlName="strength">
-          </div>
-          <div class="form-check form-check-inline">
-            <label class="form-check-label" for="EVEN">EVEN</label>
-            <input class="form-check-input" type="radio" id="EVEN" value="EVEN"  formControlName="strength">
-          </div>
-        </div>
-
-        <div class="mb-2">
-          <div class="form-check form-switch">
-            <label class="form-check-label" for="event">Goals only</label>
-            <input class="form-check-input" type="checkbox" role="switch" value="GOAL" id="event" formControlName="event">
-          </div>
-        </div>
-
-        <!-- <div class="mb-2">
-          <div class="form-check form-switch">
-            <label class="form-check-label" for="defensiveSide">Show defensive zone shots (blue)</label>
-            <input class="form-check-input" type="checkbox" role="switch" id="defensiveSide" formControlName="defensiveSide">
-          </div>
-        </div> -->
-
-        <div class="d-flex mt-3">
-          <button type="submit" class="btn btn-primary me-3 w-25">Filter</button>
-          <button type="button" class="text-black btn btn-outline-primary w-25" (click)="resetForm()">Reset</button>
-        </div>
-      </form>
     </div>
 
     <div class="col d-flex justify-content-center p-0 w-100 mb-3">

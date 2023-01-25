@@ -32,6 +32,7 @@ export class ShotMapComponent implements AfterViewInit {
   plotReady = false;
   playersReady = false;
   data: any;
+  numberShots: undefined | number = undefined; 
   teams: Array<any> = []
   players: Array<any> = []
   games: Array<any> = []
@@ -65,6 +66,7 @@ export class ShotMapComponent implements AfterViewInit {
     this.httpService.httpGetWithParameters("http://localhost:5000/shots?zone=OFF", params).subscribe({
       next: (v) => {
         this.data = v;
+        this.numberShots = v.length;
       },
       error: (e) => console.error(e),
       complete: () => this.enablePlot() 
@@ -111,7 +113,8 @@ export class ShotMapComponent implements AfterViewInit {
             name: team.name,
             link: team.link,
           });
-        })
+        });
+        this.teams.sort((a: any, b: any) => a.name.localeCompare(b.name));  // Alphabetical order
       },
       error: (e) => console.error(e),
       complete: () => this.loadPlayersAndGames(this.teams.find(x => x.abbrev == "MTL")) 
@@ -139,7 +142,7 @@ export class ShotMapComponent implements AfterViewInit {
         name: player.person.fullName,
       });
     });
-    this.players.sort((a: any, b: any) => a.name.localeCompare(b.name));  // Alphabetical order
+    this.players.sort((a: any, b: any) => a.name.split(" ")[1].localeCompare(b.name.split(" ")[1]));  // Alphabetical order
   }
 
   async parseGames(games: any) {

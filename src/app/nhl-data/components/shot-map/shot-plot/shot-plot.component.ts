@@ -70,12 +70,14 @@ export class ShotPlotComponent implements OnInit, OnChanges {
       xaxis: {
         domain: [0, 100],
         range: [0, 100],
-        visible: false
+        visible: false,
+        fixedrange: true
       },
       yaxis: {
         domain: [0, 85],
         range: [0, 85],
-        visible: false
+        visible: false,
+        fixedrange: true
       },
       images: [
         {
@@ -92,13 +94,12 @@ export class ShotPlotComponent implements OnInit, OnChanges {
       ],
     },
     config: {
-      scrollZoom: true,
       displaylogo: false,
       showTips: false,
       toImageButtonOptions: {
         filename: 'shotMapExport',
       },
-      modeBarButtonsToRemove: ['lasso2d', 'zoom2d', 'autoScale2d']
+      modeBarButtonsToRemove: ['lasso2d', 'zoom2d', 'autoScale2d', 'select2d', 'zoomIn2d', 'zoomOut2d', 'pan2d', 'resetScale2d']
     }
   };
 
