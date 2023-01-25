@@ -21,7 +21,7 @@
           <div class="mb-2">
             <label for="shooterPlayerId" class="form-label">Player:</label>
             <select class="form-select form-control" id="shooterPlayerId" formControlName="shooterPlayerId">
-              <option value="" selected hidden></option>
+              <option *ngIf="this.players.length != 0" value="" selected>All</option>
               <option *ngFor="let player of players" value="{{player.id}}">{{player.name}}</option>
             </select>
           </div>
@@ -29,7 +29,7 @@
           <div class="mb-2">
             <label for="game" class="form-label">Game:</label>
             <select class="form-select form-control" id="gameId" formControlName="gameId">
-              <option value="" selected hidden></option>
+              <option *ngIf="this.games.length != 0" value="" selected>All</option>
               <option *ngFor="let game of games" value="{{game.id}}">{{game.teamAway}} vs {{game.teamHome}} ({{game.date}})</option>
             </select>
           </div>

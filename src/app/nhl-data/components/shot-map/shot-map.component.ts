@@ -161,7 +161,12 @@ export class ShotMapComponent implements AfterViewInit {
 
   resetForm() {
     const previousTeam = this.filtersForm.get('teamCode')?.value;
-    this.filtersForm.reset({teamCode: 'MTL'});
+    this.filtersForm.reset({
+      teamCode: '',
+      strength: '',
+      shooterLeftRight: '',
+      period: ''
+    });
     if (previousTeam != 'MTL') {
       this.loadPlayersAndGames(this.teams.find(x => x.abbrev == "MTL"));
     };
