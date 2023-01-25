@@ -162,7 +162,7 @@ export class ShotMapComponent implements AfterViewInit {
   resetForm() {
     const previousTeam = this.filtersForm.get('teamCode')?.value;
     this.filtersForm.reset({
-      teamCode: '',
+      teamCode: 'MTL',
       strength: '',
       shooterLeftRight: '',
       period: ''
