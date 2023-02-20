@@ -4,13 +4,13 @@ import { BrowserModule } from '@angular/platform-browser';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { SharedModule } from './shared/shared.module';
-import { AboutMeComponent } from './about-me/about-me.component';
+import { HomeComponent } from './home/home/home.component';
 
 
 @NgModule({
   declarations: [
     AppComponent,
-    AboutMeComponent,
+    HomeComponent,
   ],
   imports: [
     BrowserModule,
