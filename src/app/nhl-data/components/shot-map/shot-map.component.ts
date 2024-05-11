@@ -14,7 +14,8 @@ export class ShotMapComponent implements AfterViewInit {
   @ViewChild('column') column? : ElementRef;
   @ViewChild('row') row? : ElementRef;
 
-  NHL_API = 'https://statsapi.web.nhl.com/api/v1/';
+  NHL_API_1 = 'https://api.nhle.com/';
+  NHL_API_2 = 'https://api-web.nhle.com/v1/';
   GRAPH_WIDTH: any = null;
   GRAPH_HEIGHT: any = null;
   GRAPH_WIDTH_TEXT!: string;
@@ -38,6 +39,7 @@ export class ShotMapComponent implements AfterViewInit {
   teams: Array<any> = []
   players: Array<any> = []
   games: Array<any> = []
+  currentDate: Date = new Date();
 
   constructor( private cdRef:ChangeDetectorRef, private httpService: HttpService,  private fb: FormBuilder) {
     this.fetchData({"teamCode": "MTL"})
@@ -106,17 +108,19 @@ export class ShotMapComponent implements AfterViewInit {
   }
 
   loadTeams() {
-    this.httpService.httpGet(this.NHL_API + "teams").subscribe({
+    this.httpService.httpGet(this.NHL_API_1 + "stats/rest/en/franchise?sort=fullName&include=lastSeason.id&include=firstSeason.id&include=teams").subscribe({
       next: (data) => {
-        data.teams.forEach((team: any) => {
-          this.teams.push({
-            id: team.id,
-            abbrev: team.abbreviation,
-            name: team.name,
-            link: team.link,
-          });
+        data.data.forEach((team: any) => {
+          // Add only active teams
+          if (team.lastSeason == null) {
+            var t = team.teams.at(-1);
+            this.teams.push({
+              id: t.id,
+              abbrev: t.triCode,
+              name: t.fullName,
+            });
+          }
         });
-        this.teams.sort((a: any, b: any) => a.name.localeCompare(b.name));  // Alphabetical order
       },
       error: (e) => console.error(e),
       complete: () => this.loadPlayersAndGames(this.teams.find(x => x.abbrev == "MTL")) 
@@ -127,34 +131,40 @@ export class ShotMapComponent implements AfterViewInit {
     this.filtersForm.get('shooterPlayerId')?.disable();
     this.filtersForm.get('shooterPlayerId')?.setValue('');
     this.players = [];
-    return this.httpService.httpGet("https://statsapi.web.nhl.com"+team.link+"/roster");
+    return this.httpService.httpGet(this.NHL_API_2 + "roster/" + team.abbrev +"/20232024");
   }
 
   getGames(team: any): Observable<any> {
     this.filtersForm.get('gameId')?.disable();
     this.filtersForm.get('gameId')?.setValue('');
     this.games = [];
-    return this.httpService.httpGet(this.NHL_API + "schedule?season=20222023&gameType=R&teamId="+team.id.toString());
+    return this.httpService.httpGet(this.NHL_API_2 + "club-schedule-season/" + team.abbrev +"/20232024");
   }
 
   async parsePlayers(players: any) {
-    players.roster.forEach((player: any) => {
+    players.forwards.forEach((player: any) => {
       this.players.push({
-        id: player.person.id,
-        name: player.person.fullName,
+        id: player.id,
+        name: player.firstName.default + " " + player.lastName.default,
+      });
+    });
+    players.defensemen.forEach((player: any) => {
+      this.players.push({
+        id: player.id,
+        name: player.firstName.default + " " + player.lastName.default,
       });
     });
     this.players.sort((a: any, b: any) => a.name.split(" ")[1].localeCompare(b.name.split(" ")[1]));  // Alphabetical order
   }
 
   async parseGames(games: any) {
-    games.dates.forEach((game: any) => {
-      if (game.games[0].status.statusCode == 7) {
+    games.games.forEach((game: any) => {
+      if (game.gameType == 3 && (new Date(game.gameDate)) < this.currentDate) {   // Playoff games
         this.games.push({
-          id: game.games[0].gamePk,
-          date: game.date,
-          teamHome: game.games[0].teams.home.team.name,
-          teamAway: game.games[0].teams.away.team.name,
+          id: game.id,
+          date: game.gameDate,
+          teamHome: game.homeTeam.abbrev,
+          teamAway: game.awayTeam.abbrev,
         });
       }
     });
