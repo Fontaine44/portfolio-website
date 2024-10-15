@@ -131,14 +131,14 @@ export class ShotMapComponent implements AfterViewInit {
     this.filtersForm.get('shooterPlayerId')?.disable();
     this.filtersForm.get('shooterPlayerId')?.setValue('');
     this.players = [];
-    return this.httpService.httpGet(this.NHL_API_2 + "roster/" + team.abbrev +"/20232024");
+    return this.httpService.httpGet(this.NHL_API_2 + "roster/" + team.abbrev +"/20242025");
   }
 
   getGames(team: any): Observable<any> {
     this.filtersForm.get('gameId')?.disable();
     this.filtersForm.get('gameId')?.setValue('');
     this.games = [];
-    return this.httpService.httpGet(this.NHL_API_2 + "club-schedule-season/" + team.abbrev +"/20232024");
+    return this.httpService.httpGet(this.NHL_API_2 + "club-schedule-season/" + team.abbrev +"/20242025");
   }
 
   async parsePlayers(players: any) {
@@ -159,7 +159,7 @@ export class ShotMapComponent implements AfterViewInit {
 
   async parseGames(games: any) {
     games.games.forEach((game: any) => {
-      if (game.gameType == 3 && (new Date(game.gameDate)) < this.currentDate) {   // Playoff games
+      if (game.gameType == 2 && (new Date(game.gameDate)) < this.currentDate) {
         this.games.push({
           id: game.id,
           date: game.gameDate,
