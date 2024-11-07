@@ -68,6 +68,7 @@ export class ShotMapComponent implements AfterViewInit {
   fetchData(params: object) {
     this.httpService.httpGetWithParameters(`${this.API}/shots?zone=OFF`, params).subscribe({
       next: (v) => {
+        console.log(v);
         this.data = v;
         this.numberShots = v.length;
       },
@@ -111,7 +112,7 @@ export class ShotMapComponent implements AfterViewInit {
       next: (data) => {
         data.data.forEach((team: any) => {
           // Add only active teams
-          if (team.lastSeason == null) {
+          if (team.lastSeason == null && team.id !== 15) {
             var t = team.teams.at(-1);
             this.teams.push({
               id: t.id,
@@ -119,7 +120,7 @@ export class ShotMapComponent implements AfterViewInit {
               name: t.fullName,
             });
           } else if (team.id === 15) {
-            var t = team.teams.at(1);
+            var t = team.teams.at(0);
             this.teams.push({
               id: t.id,
               abbrev: t.triCode,
