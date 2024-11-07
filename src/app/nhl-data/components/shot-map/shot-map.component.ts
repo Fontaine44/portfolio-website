@@ -68,7 +68,6 @@ export class ShotMapComponent implements AfterViewInit {
   fetchData(params: object) {
     this.httpService.httpGetWithParameters(`${this.API}/shots?zone=OFF`, params).subscribe({
       next: (v) => {
-        console.log(v);
         this.data = v;
         this.numberShots = v.length;
       },
