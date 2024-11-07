@@ -14,8 +14,8 @@ export class ShotMapComponent implements AfterViewInit {
   @ViewChild('column') column? : ElementRef;
   @ViewChild('row') row? : ElementRef;
 
-  NHL_API_1 = 'https://api.nhle.com/';
-  NHL_API_2 = 'https://api-web.nhle.com/v1/';
+  // API = "https://fontaine.onrender.com";
+  API = "http://localhost:5000";
   GRAPH_WIDTH: any = null;
   GRAPH_HEIGHT: any = null;
   GRAPH_WIDTH_TEXT!: string;
@@ -67,7 +67,7 @@ export class ShotMapComponent implements AfterViewInit {
   }
 
   fetchData(params: object) {
-    this.httpService.httpGetWithParameters("https://fontaine.onrender.com/shots?zone=OFF", params).subscribe({
+    this.httpService.httpGetWithParameters(`${this.API}/shots?zone=OFF`, params).subscribe({
       next: (v) => {
         this.data = v;
         this.numberShots = v.length;
@@ -108,12 +108,19 @@ export class ShotMapComponent implements AfterViewInit {
   }
 
   loadTeams() {
-    this.httpService.httpGet(this.NHL_API_1 + "stats/rest/en/franchise?sort=fullName&include=lastSeason.id&include=firstSeason.id&include=teams").subscribe({
+    this.httpService.httpGet(`${this.API}/teams`).subscribe({
       next: (data) => {
         data.data.forEach((team: any) => {
           // Add only active teams
           if (team.lastSeason == null) {
             var t = team.teams.at(-1);
+            this.teams.push({
+              id: t.id,
+              abbrev: t.triCode,
+              name: t.fullName,
+            });
+          } else if (team.id === 15) {
+            var t = team.teams.at(1);
             this.teams.push({
               id: t.id,
               abbrev: t.triCode,
@@ -131,14 +138,14 @@ export class ShotMapComponent implements AfterViewInit {
     this.filtersForm.get('shooterPlayerId')?.disable();
     this.filtersForm.get('shooterPlayerId')?.setValue('');
     this.players = [];
-    return this.httpService.httpGet(this.NHL_API_2 + "roster/" + team.abbrev +"/20242025");
+    return this.httpService.httpGet(`${this.API}/players/${team.abbrev}`);
   }
 
   getGames(team: any): Observable<any> {
     this.filtersForm.get('gameId')?.disable();
     this.filtersForm.get('gameId')?.setValue('');
     this.games = [];
-    return this.httpService.httpGet(this.NHL_API_2 + "club-schedule-season/" + team.abbrev +"/20242025");
+    return this.httpService.httpGet(`${this.API}/games/${team.abbrev}`);
   }
 
   async parsePlayers(players: any) {
