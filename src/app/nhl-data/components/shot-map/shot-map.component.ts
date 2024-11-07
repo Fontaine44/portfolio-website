@@ -14,8 +14,7 @@ export class ShotMapComponent implements AfterViewInit {
   @ViewChild('column') column? : ElementRef;
   @ViewChild('row') row? : ElementRef;
 
-  // API = "https://fontaine.onrender.com";
-  API = "http://localhost:5000";
+  API = "https://fontaine.onrender.com";
   GRAPH_WIDTH: any = null;
   GRAPH_HEIGHT: any = null;
   GRAPH_WIDTH_TEXT!: string;
