@@ -1,34 +1,29 @@
-import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, ViewChild } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { CommonModule } from '@angular/common';
+import { ChangeDetectorRef, Component, ElementRef, ViewChild } from '@angular/core';
+import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { forkJoin, Observable } from 'rxjs';
-import { HttpService } from 'src/app/shared/services/http.service';
-
+import { HttpService } from '../../shared/services/http.service';
+import { environment } from '../../../environments/environment';
+import { ShotPlotComponent } from './shot-plot/shot-plot.component';
 
 @Component({
   selector: 'app-shot-map',
+  standalone: true,
+  imports: [CommonModule, ReactiveFormsModule, FormsModule, ShotPlotComponent],
   templateUrl: './shot-map.component.html',
-  styleUrls: ['./shot-map.component.scss']
+  styleUrl: './shot-map.component.scss'
 })
-export class ShotMapComponent implements AfterViewInit {
-
+export class ShotMapComponent {
   @ViewChild('column') column? : ElementRef;
   @ViewChild('row') row? : ElementRef;
 
-  API = "https://fontaine.onrender.com";
+  API = environment.nhlAPI;
   GRAPH_WIDTH: any = null;
   GRAPH_HEIGHT: any = null;
   GRAPH_WIDTH_TEXT!: string;
   GRAPH_HEIGHT_TEXT!: string;
 
-  filtersForm: FormGroup = this.fb.group({
-    teamCode: 'MTL',
-    shooterPlayerId: {value:'', disabled: true},
-    gameId: {value:'', disabled: true},
-    strength: '',
-    event: '',
-    shooterLeftRight: '',
-    period: ''
-  });
+  filtersForm!: FormGroup;
   
   dataReady = false;
   plotReady = false;
@@ -40,7 +35,20 @@ export class ShotMapComponent implements AfterViewInit {
   games: Array<any> = []
   currentDate: Date = new Date();
 
-  constructor( private cdRef:ChangeDetectorRef, private httpService: HttpService,  private fb: FormBuilder) {
+  constructor(
+    private cdRef: ChangeDetectorRef,
+    private httpService: HttpService, 
+    private fb: FormBuilder
+  ) {
+    this.filtersForm = this.fb.group({
+      teamCode: 'MTL',
+      shooterPlayerId: {value:'', disabled: true},
+      gameId: {value:'', disabled: true},
+      strength: '',
+      event: '',
+      shooterLeftRight: '',
+      period: ''
+    });
     this.fetchData({"teamCode": "MTL"})
     this.loadTeams();
   }
@@ -52,10 +60,10 @@ export class ShotMapComponent implements AfterViewInit {
 
   setHeightWidth () {
     let h, w;
-    w = this.row?.nativeElement.offsetWidth-20;
+    w = this.column?.nativeElement.offsetWidth-50;
     h = w*0.85;
-    if (h > this.column?.nativeElement.offsetHeight) {
-      h = this.column?.nativeElement.offsetHeight-20;
+    if (h > this.row?.nativeElement.offsetHeight) {
+      h = this.row?.nativeElement.offsetHeight-50;
       w = h*1.17;
     }
     this.GRAPH_WIDTH = w;
@@ -66,7 +74,7 @@ export class ShotMapComponent implements AfterViewInit {
   }
 
   fetchData(params: object) {
-    this.httpService.httpGetWithParameters(`${this.API}/shots?zone=OFF`, params).subscribe({
+    this.httpService.getWithParameters(`${this.API}/shots?zone=OFF`, params).subscribe({
       next: (v) => {
         this.data = v;
         this.numberShots = v.length;
@@ -107,7 +115,7 @@ export class ShotMapComponent implements AfterViewInit {
   }
 
   loadTeams() {
-    this.httpService.httpGet(`${this.API}/teams`).subscribe({
+    this.httpService.get(`${this.API}/teams`).subscribe({
       next: (data) => {
         data.data.forEach((team: any) => {
           // Add only active teams
@@ -137,14 +145,14 @@ export class ShotMapComponent implements AfterViewInit {
     this.filtersForm.get('shooterPlayerId')?.disable();
     this.filtersForm.get('shooterPlayerId')?.setValue('');
     this.players = [];
-    return this.httpService.httpGet(`${this.API}/players/${team.abbrev}`);
+    return this.httpService.get(`${this.API}/players/${team.abbrev}`);
   }
 
   getGames(team: any): Observable<any> {
     this.filtersForm.get('gameId')?.disable();
     this.filtersForm.get('gameId')?.setValue('');
     this.games = [];
-    return this.httpService.httpGet(`${this.API}/games/${team.abbrev}`);
+    return this.httpService.get(`${this.API}/games/${team.abbrev}`);
   }
 
   async parsePlayers(players: any) {
