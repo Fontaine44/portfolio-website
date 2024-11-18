@@ -1,0 +1,28 @@
+<div class="d-flex flex-column p-3 gap-3">
+    <h2>Projects</h2>
+    <!-- <p>Enter text here</p> -->
+
+    <div class="d-flex flex-wrap gap-4">
+        <div class="card" style="width: 25rem">
+            <a routerLink="/shot-map">
+                <img src="shot-map.png" class="card-img-top" alt="...">
+            </a>
+
+            <div class="card-body">
+                <h5 class="card-title">NHL Shot Map</h5>
+                <p class="card-text text-justify" style="text-align: justify; text-justify: inter-word;">Used the shots data from MoneyPuck.com to generate shot heatmaps using Kernel Density Estimation. The data is updated automatically every night and uploaded to a database. Built a Python Flask API and an Angular front-end to visualize the shots.</p>
+                <a routerLink="/shot-map" class="btn btn-primary">Visualize shot maps</a>
+            </div>
+        </div>
+
+        <div class="card" style="width: 25rem;">
+            <img src="mcdavid.png" class="card-img-top" alt="...">
+
+            <div class="card-body">
+                <h5 class="card-title">NHL Salary Evaluator</h5>
+                <p class="card-text" style="text-align: justify;">Project in progress for my class ECSE 526: Artificial Intelligence. Building a salary evaluator using player information, salary, and advanced statistics from 2013 to 2023. Optimizing differential AI model to obtain the best evaluator and determine important feature for evaluating the contract of a player in the NHL.</p>
+                <a class="btn btn-primary">In Progress</a>
+            </div>
+        </div>
+    </div>
+</div>

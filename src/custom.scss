@@ -1,0 +1,16 @@
+$primary: #23198f;
+
+@import "../node_modules/bootstrap/scss/bootstrap";
+@import "../node_modules/bootstrap-icons/font/bootstrap-icons";
+
+.btn-primary,
+.btn-primary:hover,
+.btn-primary:active,
+.btn-primary:visited,
+.btn-primary:focus {
+    color: #FFF;
+}
+
+body {
+    font-family: 'Open Sans', sans-serif;
+}

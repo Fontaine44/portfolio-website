@@ -9,12 +9,16 @@ export class HttpService {
 
   constructor(private http: HttpClient) { }
 
-  httpGet(url: string) : Observable<any> {
+  get(url: string) : Observable<any> {
     return this.http.get(url);
   }
 
-  httpGetWithParameters(url: string, params: any) : Observable<any> {
+  getWithParameters(url: string, params: any) : Observable<any> {
     let queryParams = new HttpParams({ fromObject: params });
     return this.http.get(url, { params: queryParams})
+  }
+
+  post(url: string, body: any | null) : Observable<any> {
+    return this.http.post(url, body);
   }
 }

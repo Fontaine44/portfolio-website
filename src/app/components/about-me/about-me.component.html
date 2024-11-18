@@ -1,0 +1,50 @@
+<div class="d-flex flex-column p-3 gap-3 h-100">
+    <h2 class="text-center">About Me</h2>
+
+    <div class="d-flex flex-wrap gap-3">
+        <div class="col-xl-3 col-12 d-flex justify-content-center mb-3">
+            <img src="me.jpg" alt="..." width="300px" height="300px">
+        </div>
+
+        
+        <div class="col-xl-8 col-12 d-flex flex-column">
+            <h4>Raphael Fontaine</h4>
+            <p class="fst-italic">Montréal, QC, Canada</p>
+
+            <p style="text-align: justify;">
+                I am a 4th year student at McGill University with a strong passion for data analytics in sports.
+                I am set to graduate in April 2025 with a Bachelor's degree in Computer Engineering, and a Minor in Applied Artificial Intelligence. Currently looking for research opportunities in data analytics or machine learning.
+            </p>
+            
+            <div class="d-flex gap-4">
+                <button type="button" class="btn btn-primary">
+                    <a class="CV-link" [href]="CVen" target="_blank">
+                        <i class="bi bi-file-earmark-person"></i>
+                        Resume EN
+                    </a>
+                </button>
+                <button type="button" class="btn btn-primary">
+                    <a class="CV-link" [href]="CVfr" target="_blank">
+                        <i class="bi bi-file-earmark-person"></i>
+                        Resume FR
+                    </a>
+                </button>
+                <a [href]="links.email">
+                    <i class="bi bi-envelope icon"></i>
+                </a>
+                <a [href]="links.linkedIn" target="_blank">
+                    <i class="bi bi-linkedin icon"></i>
+                </a>
+                <a [href]="links.github" target="_blank">
+                    <i class="bi bi-github icon"></i>
+                </a>
+
+            </div>
+
+
+        </div>
+        
+    </div>
+</div>
+
+

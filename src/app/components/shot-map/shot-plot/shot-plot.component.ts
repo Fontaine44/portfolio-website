@@ -1,11 +1,18 @@
-import { Component, Input, OnChanges, OnInit } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { Component, Input } from '@angular/core';
+import { PlotlyModule } from 'angular-plotly.js';
+import * as PlotlyJS from 'plotly.js-dist-min';
+
+PlotlyModule.plotlyjs = PlotlyJS;
 
 @Component({
   selector: 'app-shot-plot',
+  standalone: true,
+  imports: [CommonModule, PlotlyModule],
   templateUrl: './shot-plot.component.html',
-  styleUrls: ['./shot-plot.component.scss']
+  styleUrl: './shot-plot.component.scss'
 })
-export class ShotPlotComponent implements OnInit, OnChanges {
+export class ShotPlotComponent {
   @Input() loading?: boolean;
   @Input() height?: number;
   @Input() width?: boolean;
@@ -81,7 +88,7 @@ export class ShotPlotComponent implements OnInit, OnChanges {
       },
       images: [
         {
-          source: "../assets/rink.png",
+          source: "rink.png",
           xref: "x",
           yref: "y",
           x: 0,
