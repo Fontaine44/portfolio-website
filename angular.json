@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "mgcil": {
+    "portfolio-website": {
       "projectType": "application",
       "schematics": {
         "@schematics/angular:component": {
@@ -17,7 +17,7 @@
         "build": {
           "builder": "@angular-devkit/build-angular:application",
           "options": {
-            "outputPath": "dist/mgcil",
+            "outputPath": "dist/portfolio-website",
             "index": "src/index.html",
             "browser": "src/main.ts",
             "polyfills": [
@@ -73,10 +73,10 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
-              "buildTarget": "mgcil:build:production"
+              "buildTarget": "portfolio-website:build:production"
             },
             "development": {
-              "buildTarget": "mgcil:build:development"
+              "buildTarget": "portfolio-website:build:development"
             }
           },
           "defaultConfiguration": "development"
