@@ -117,23 +117,12 @@ export class ShotMapComponent {
   loadTeams() {
     this.httpService.get(`${this.API}/teams`).subscribe({
       next: (data) => {
-        data.data.forEach((team: any) => {
-          // Add only active teams
-          if (team.lastSeason == null && team.id !== 15) {
-            var t = team.teams.at(-1);
-            this.teams.push({
-              id: t.id,
-              abbrev: t.triCode,
-              name: t.fullName,
-            });
-          } else if (team.id === 15) {
-            var t = team.teams.at(0);
-            this.teams.push({
-              id: t.id,
-              abbrev: t.triCode,
-              name: t.fullName,
-            });
-          }
+        data.teams.forEach((team: any) => {
+          this.teams.push({
+            id: team.id,
+            abbrev: team.triCode,
+            name: team.fullName,
+          });
         });
       },
       error: (e) => console.error(e),
