@@ -3,25 +3,37 @@
     <!-- <p>Enter text here</p> -->
 
     <div class="d-flex flex-wrap gap-4">
-        <div class="card" style="width: 25rem">
+        <div class="card">
             <a routerLink="/shot-map">
                 <img src="shot-map.png" class="card-img-top" alt="...">
             </a>
 
             <div class="card-body">
                 <h5 class="card-title">NHL Shot Map</h5>
-                <p class="card-text text-justify" style="text-align: justify; text-justify: inter-word;">Used the shots data from MoneyPuck.com to generate shot heatmaps using Kernel Density Estimation. The data is updated automatically every night and uploaded to a database. Built a Python Flask API and an Angular front-end to visualize the shots.</p>
+                <p class="card-text">Used the shots data from MoneyPuck.com to generate shot heatmaps using Kernel Density Estimation. The data is updated automatically every night and uploaded to a database. Built a Python Flask API and an Angular front-end to visualize the shots.</p>
                 <a routerLink="/shot-map" class="btn btn-primary">Visualize shot maps</a>
             </div>
         </div>
 
-        <div class="card" style="width: 25rem;">
+        <div class="card">
             <img src="mcdavid.png" class="card-img-top" alt="...">
 
             <div class="card-body">
                 <h5 class="card-title">Enhancing NHL Salary Evaluation through Dimensionality Reduction</h5>
-                <p class="card-text" style="text-align: justify;">This project explores the use of dimensionality reduction techniques to evaluate and analyze the salaries of NHL players. By applying methods such as PCA, PLS, Random Projection, and feature selection, the project aims to simplify the data while preserving important information. These techniques are assessed based on their ability to preserve model performance, reduce training time, and identify the most significant features in the dataset.</p>
+                <p class="card-text">This project explores the use of dimensionality reduction techniques to evaluate and analyze the salaries of NHL players. By applying methods such as PCA, PLS, Random Projection, and feature selection, the project aims to simplify the data while preserving important information. These techniques are assessed based on their ability to preserve model performance, reduce training time, and identify the most significant features in the dataset.</p>
                 <a href="https://github.com/Fontaine44/NHL-Salary-Evaluation/blob/main/Report.pdf" target="_blank" class="btn btn-primary">Consult report</a>
+            </div>
+        </div>
+
+        <div class="card">
+            <img src="clearwatt.png" class="card-img-top" alt="...">
+            <img src="clearwatt2.png" class="card-img-top" alt="...">
+
+            <div class="card-body">
+                <h5 class="card-title">ClearWatt Web Application</h5>
+                <p class="card-text">Developed a full-stack web application for a start-up team competing in the 2025 Canadian Engineering Games, using Angular for the frontend and Python Flask for the backend.</p>
+                <a href="https://github.com/Fontaine44/ClearWatt" target="_blank" class="btn btn-primary me-2">Source Code</a>
+                <a href="https://clearwatt.onrender.com/" target="_blank" class="btn btn-primary">Website</a>
             </div>
         </div>
     </div>
